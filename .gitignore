@@ -1,0 +1,182 @@
+# ============================================
+# NyayAssist Project .gitignore
+# ============================================
+
+# ============================================
+# Environment & Configuration
+# ============================================
+.env
+.env.*
+*.env
+!.env.example
+
+# ============================================
+# Python
+# ============================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+.ENV/
+env.bak/
+venv.bak/
+nat/
+
+# Conda
+conda-meta/
+
+# Testing & Coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Type checkers
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+
+# ============================================
+# Node.js / Frontend
+# ============================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.tsbuildinfo
+.npm
+.eslintcache
+.yarn-integrity
+*.tgz
+dist/
+dist-ssr/
+*.local
+
+# ============================================
+# IDE & Editors
+# ============================================
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.iml
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+\#*\#
+.\#*
+
+# ============================================
+# OS Generated
+# ============================================
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ============================================
+# Logs & Temp Files
+# ============================================
+logs/
+*.log
+*.log.*
+*.tmp
+*.temp
+tmp/
+temp/
+
+# ============================================
+# Database
+# ============================================
+*.db
+*.sqlite
+*.sqlite3
+*.sql.backup
+
+# ============================================
+# ML/AI & Models
+# ============================================
+*.bin
+*.h5
+*.pkl
+*.pickle
+*.joblib
+*.safetensors
+.cache/
+# faiss_index/  # Uncomment to ignore FAISS indexes
+
+# ============================================
+# Uploads & Generated Files
+# ============================================
+uploads/
+uploaded_files/
+# *.pdf  # Uncomment to ignore PDF files
+
+# ============================================
+# Secrets & Credentials
+# ============================================
+*.pem
+*.key
+*.crt
+*.p12
+secrets/
+credentials/
+service-account*.json
+
+# ============================================
+# Jupyter Notebooks
+# ============================================
+.ipynb_checkpoints/
+profile_default/
+ipython_config.py
+
+# ============================================
+# Misc
+# ============================================
+*.bak
+*.backup
+*.old
