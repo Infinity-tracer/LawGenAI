@@ -115,7 +115,22 @@ const Auth: React.FC<AuthProps> = ({ onSuccess, onBack }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0b0d0c] p-6">
+    <div className="min-h-screen flex items-center justify-center bg-[#0b0d0c] p-6 relative">
+      {/* College Logo - Top Left Corner */}
+      <div className="absolute top-4 left-4 z-50">
+        <div className="border-2 border-[#d4af37] p-0.5">
+          <img 
+            src="/college-logo.png" 
+            alt="College Logo" 
+            className="h-14 w-14 object-contain"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.style.display = 'none';
+            }}
+          />
+        </div>
+      </div>
+
       <div className="w-full max-w-md">
         <div className="text-center mb-10">
           <div className="flex justify-center mb-4 text-[#d4af37]">

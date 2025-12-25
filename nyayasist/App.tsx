@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Landing from './components/Landing';
 import Auth from './components/Auth';
 import Chat from './components/Chat';
+import Layout from './components/Layout';
 import { View } from './types';
 
 const App: React.FC = () => {
@@ -35,20 +36,22 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0b0d0c] text-[#f5f5f5]">
-      {currentView === View.LANDING && (
-        <Landing onTryNow={() => navigate(View.AUTH)} />
-      )}
-      {currentView === View.AUTH && (
-        <Auth 
-          onSuccess={handleLogin} 
-          onBack={() => navigate(View.LANDING)} 
-        />
-      )}
-      {currentView === View.CHAT && (
-        <Chat onLogout={handleLogout} />
-      )}
-    </div>
+    <Layout showFooter={currentView !== View.CHAT}>
+      <div className="min-h-screen bg-[#0b0d0c] text-[#f5f5f5]">
+        {currentView === View.LANDING && (
+          <Landing onTryNow={() => navigate(View.AUTH)} />
+        )}
+        {currentView === View.AUTH && (
+          <Auth 
+            onSuccess={handleLogin} 
+            onBack={() => navigate(View.LANDING)} 
+          />
+        )}
+        {currentView === View.CHAT && (
+          <Chat onLogout={handleLogout} />
+        )}
+      </div>
+    </Layout>
   );
 };
 

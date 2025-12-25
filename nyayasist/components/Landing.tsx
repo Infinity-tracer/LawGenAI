@@ -9,6 +9,21 @@ interface LandingProps {
 const Landing: React.FC<LandingProps> = ({ onTryNow }) => {
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+      {/* College Logo - Top Left Corner */}
+      <div className="absolute top-4 left-4 z-50">
+        <div className="border-2 border-[#d4af37] p-0.5">
+          <img 
+            src="/college-logo.png" 
+            alt="College Logo" 
+            className="h-14 w-14 object-contain"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.style.display = 'none';
+            }}
+          />
+        </div>
+      </div>
+
       {/* Background with Indian Law Theme overlays */}
       <div className="absolute inset-0 z-0 opacity-10 flex items-center justify-center pointer-events-none">
          <EmblemIcon className="w-[80vw] h-[80vw] text-[#3d2b1f]" />

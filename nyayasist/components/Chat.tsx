@@ -169,8 +169,18 @@ const Chat: React.FC<ChatProps> = ({ onLogout }) => {
       {/* Sidebar */}
       <aside className="w-80 bg-[#161817] flex flex-col border-r border-[#3d2b1f]">
         <div className="p-6">
-          <div className="flex items-center mb-8 text-[#d4af37]">
-            <LawIcon className="w-8 h-8 mr-3" />
+          <div className="flex items-center mb-8">
+            <div className="border-2 border-[#d4af37] p-0.5 mr-3">
+              <img 
+                src="/college-logo.png" 
+                alt="College Logo" 
+                className="h-12 w-12 object-contain"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                }}
+              />
+            </div>
             <h2 className="text-xl font-bold tracking-tight serif text-[#f5f5f5]">NYAYASIST</h2>
           </div>
           
@@ -246,13 +256,36 @@ const Chat: React.FC<ChatProps> = ({ onLogout }) => {
             Leave Chambers (Logout)
           </button>
         </div>
+
+        {/* Footer */}
+        <div className="p-3 border-t border-[#3d2b1f] bg-[#0b0d0c] text-center">
+          <p className="text-[#d4af37] text-[10px] tracking-wide">
+            © {new Date().getFullYear()} All Rights Reserved
+          </p>
+          <p className="text-[#f5f5f5]/50 text-[9px] mt-1 tracking-widest uppercase">
+            Developed by <span className="text-[#d4af37]">NAYASRI P</span> & <span className="text-[#d4af37]">NITYA SHARMA</span>
+          </p>
+        </div>
       </aside>
 
       {/* Main Chat Area */}
       <main className="flex-1 flex flex-col relative overflow-hidden">
         <header className="h-16 border-b border-[#3d2b1f] flex items-center px-8 justify-between bg-[#0b0d0c]/80 backdrop-blur-md z-10">
-          <div className="text-sm font-medium text-[#d4af37] serif tracking-[0.1em]">
-            {chatMode === ChatMode.PDF_CHAT ? '📄 PDF Analysis Mode' : '⚖️ Indian Kanoon Search'}
+          <div className="flex items-center gap-3">
+            <div className="border-2 border-[#d4af37] p-0.5">
+              <img 
+                src="/college-logo.png" 
+                alt="College Logo" 
+                className="h-10 w-10 object-contain"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                }}
+              />
+            </div>
+            <div className="text-sm font-medium text-[#d4af37] serif tracking-[0.1em]">
+              {chatMode === ChatMode.PDF_CHAT ? '📄 PDF Analysis Mode' : '⚖️ Indian Kanoon Search'}
+            </div>
           </div>
           <div className="flex gap-4 text-xs">
             {chatMode === ChatMode.PDF_CHAT && (
