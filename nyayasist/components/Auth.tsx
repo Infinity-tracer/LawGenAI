@@ -16,9 +16,12 @@ const Auth: React.FC<AuthProps> = ({ onSuccess, onBack }) => {
     email: '',
     phone: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    otp: ''
   });
   const [errors, setErrors] = useState<string[]>([]);
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpMessage, setOtpMessage] = useState('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -26,19 +29,19 @@ const Auth: React.FC<AuthProps> = ({ onSuccess, onBack }) => {
 
   const validateSignup = () => {
     const newErrors: string[] = [];
-    
+
     if (!/^[a-zA-Z\s]+$/.test(formData.fullName)) {
       newErrors.push("Name must contain only alphabets and spaces.");
     }
-    
+
     if (!formData.email.includes('@')) {
       newErrors.push("Email must be valid (contain @).");
     }
-    
+
     if (!/^\d{10}$/.test(formData.phone)) {
       newErrors.push("Phone number must be exactly 10 digits.");
     }
-    
+
     if (formData.password.length < 8) {
       newErrors.push("Password must be at least 8 characters.");
     }
@@ -48,12 +51,35 @@ const Auth: React.FC<AuthProps> = ({ onSuccess, onBack }) => {
     if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.password)) {
       newErrors.push("Password must contain at least one special character.");
     }
-    
+
     if (formData.password !== formData.confirmPassword) {
       newErrors.push("Passwords do not match.");
     }
 
     return newErrors;
+  };
+
+  const handleSendOtp = async () => {
+    const validationErrors = validateSignup();
+    if (validationErrors.length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    setIsLoading(true);
+    setErrors([]);
+
+    try {
+      const response = await import('../utils/apiService').then(m => m.sendVerificationOTP(formData.email));
+      if (response.success) {
+        setOtpSent(true);
+        setOtpMessage('Verification code sent to your email.');
+      }
+    } catch (error: any) {
+      setErrors([error.message || 'Failed to send verification code.']);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -68,7 +94,7 @@ const Auth: React.FC<AuthProps> = ({ onSuccess, onBack }) => {
           email: formData.email,
           password: formData.password
         });
-        
+
         if (response.success) {
           // Store user in localStorage for session persistence
           const userData = {
@@ -80,10 +106,16 @@ const Auth: React.FC<AuthProps> = ({ onSuccess, onBack }) => {
           onSuccess(userData);
         }
       } else {
-        // Validate before registration
-        const validationErrors = validateSignup();
-        if (validationErrors.length > 0) {
-          setErrors(validationErrors);
+        // Registration Flow
+        if (!otpSent) {
+          // Send OTP First
+          await handleSendOtp();
+          return;
+        }
+
+        // Verify OTP and Register
+        if (!formData.otp || formData.otp.length !== 6) {
+          setErrors(['Please enter the 6-digit verification code sent to your email.']);
           setIsLoading(false);
           return;
         }
@@ -93,7 +125,8 @@ const Auth: React.FC<AuthProps> = ({ onSuccess, onBack }) => {
           full_name: formData.fullName,
           email: formData.email,
           phone: formData.phone,
-          password: formData.password
+          password: formData.password,
+          otp: formData.otp
         });
 
         if (response.success) {
@@ -119,9 +152,9 @@ const Auth: React.FC<AuthProps> = ({ onSuccess, onBack }) => {
       {/* College Logo - Top Left Corner */}
       <div className="absolute top-4 left-4 z-50">
         <div className="border-2 border-[#d4af37] p-0.5">
-          <img 
-            src="/college-logo.png" 
-            alt="College Logo" 
+          <img
+            src="/college-logo.png"
+            alt="College Logo"
             className="h-14 w-14 object-contain"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
@@ -157,6 +190,7 @@ const Auth: React.FC<AuthProps> = ({ onSuccess, onBack }) => {
                     onChange={handleInputChange}
                     className="w-full bg-[#0b0d0c] border border-[#3d2b1f] text-[#f5f5f5] p-3 outline-none focus:border-[#d4af37] font-light"
                     placeholder="Advocate Name"
+                    disabled={otpSent}
                   />
                 </div>
                 <div>
@@ -168,6 +202,7 @@ const Auth: React.FC<AuthProps> = ({ onSuccess, onBack }) => {
                     onChange={handleInputChange}
                     className="w-full bg-[#0b0d0c] border border-[#3d2b1f] text-[#f5f5f5] p-3 outline-none focus:border-[#d4af37] font-light"
                     placeholder="10 Digits"
+                    disabled={otpSent}
                   />
                 </div>
               </>
@@ -182,6 +217,7 @@ const Auth: React.FC<AuthProps> = ({ onSuccess, onBack }) => {
                 onChange={handleInputChange}
                 className="w-full bg-[#0b0d0c] border border-[#3d2b1f] text-[#f5f5f5] p-3 outline-none focus:border-[#d4af37] font-light"
                 placeholder="email@court.gov.in"
+                disabled={otpSent || (isLogin && isLoading)}
               />
             </div>
 
@@ -194,10 +230,11 @@ const Auth: React.FC<AuthProps> = ({ onSuccess, onBack }) => {
                 onChange={handleInputChange}
                 className="w-full bg-[#0b0d0c] border border-[#3d2b1f] text-[#f5f5f5] p-3 outline-none focus:border-[#d4af37] font-light"
                 placeholder="********"
+                disabled={otpSent || (isLogin && isLoading)}
               />
             </div>
 
-            {!isLogin && (
+            {!isLogin && !otpSent && (
               <div>
                 <label className="block text-xs uppercase tracking-widest text-[#d4af37] mb-2 font-semibold">Confirm Password</label>
                 <input
@@ -207,6 +244,24 @@ const Auth: React.FC<AuthProps> = ({ onSuccess, onBack }) => {
                   onChange={handleInputChange}
                   className="w-full bg-[#0b0d0c] border border-[#3d2b1f] text-[#f5f5f5] p-3 outline-none focus:border-[#d4af37] font-light"
                   placeholder="********"
+                />
+              </div>
+            )}
+
+            {otpSent && !isLogin && (
+              <div className="animate-pulse-once">
+                <div className="bg-green-900/20 border-l-4 border-green-500 p-4 mb-4">
+                  <p className="text-green-400 text-xs">{otpMessage}</p>
+                </div>
+                <label className="block text-xs uppercase tracking-widest text-[#d4af37] mb-2 font-semibold">Verification Code</label>
+                <input
+                  type="text"
+                  name="otp"
+                  value={formData.otp}
+                  onChange={handleInputChange}
+                  className="w-full bg-[#0b0d0c] border border-[#3d2b1f] text-[#f5f5f5] p-3 outline-none focus:border-[#d4af37] font-light text-center tracking-[0.5em] text-xl"
+                  placeholder="------"
+                  maxLength={6}
                 />
               </div>
             )}
@@ -226,7 +281,7 @@ const Auth: React.FC<AuthProps> = ({ onSuccess, onBack }) => {
               disabled={isLoading}
               className="w-full bg-[#3d2b1f] border border-[#d4af37] text-[#f5f5f5] py-4 text-sm tracking-[0.3em] font-bold hover:bg-[#4d3b2f] uppercase transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? 'PROCESSING...' : (isLogin ? 'ENTER CHAMBERS' : 'ESTABLISH ACCESS')}
+              {isLoading ? 'PROCESSING...' : (isLogin ? 'ENTER CHAMBERS' : (otpSent ? 'VERIFY & ACCESS' : 'SEND CODE'))}
             </button>
           </form>
 
@@ -242,8 +297,8 @@ const Auth: React.FC<AuthProps> = ({ onSuccess, onBack }) => {
             </button>
           </div>
         </div>
-        
-        <button 
+
+        <button
           onClick={onBack}
           className="mt-8 text-[#f5f5f5] opacity-30 text-xs w-full hover:opacity-100 tracking-[0.2em] uppercase transition-opacity"
         >

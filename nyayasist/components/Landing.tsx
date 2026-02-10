@@ -12,9 +12,9 @@ const Landing: React.FC<LandingProps> = ({ onTryNow }) => {
       {/* College Logo - Top Left Corner */}
       <div className="absolute top-4 left-4 z-50">
         <div className="border-2 border-[#d4af37] p-0.5">
-          <img 
-            src="/college-logo.png" 
-            alt="College Logo" 
+          <img
+            src="/college-logo.png"
+            alt="College Logo"
             className="h-14 w-14 object-contain"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
@@ -26,7 +26,7 @@ const Landing: React.FC<LandingProps> = ({ onTryNow }) => {
 
       {/* Background with Indian Law Theme overlays */}
       <div className="absolute inset-0 z-0 opacity-10 flex items-center justify-center pointer-events-none">
-         <EmblemIcon className="w-[80vw] h-[80vw] text-[#3d2b1f]" />
+        <EmblemIcon className="w-[80vw] h-[80vw] text-[#3d2b1f]" />
       </div>
 
       {/* Content */}
@@ -37,24 +37,24 @@ const Landing: React.FC<LandingProps> = ({ onTryNow }) => {
             NYAYASIST
           </h1>
         </div>
-        
+
         <h2 className="text-2xl md:text-4xl font-light mb-8 text-[#d4af37] uppercase tracking-[0.2em] serif">
           AI-Powered Legal Intelligence
         </h2>
-        
+
         <p className="text-lg md:text-xl text-[#f5f5f5] opacity-80 mb-12 leading-relaxed max-w-2xl mx-auto font-light">
           Revolutionizing Indian legal research with precision mapping, comprehensive case analysis, and intelligent summaries designed for the modern advocate.
         </p>
 
         <div className="flex justify-center items-center">
-          <button 
+          <button
             onClick={onTryNow}
             className="w-full md:w-auto bg-[#3d2b1f] border border-[#d4af37] text-[#f5f5f5] px-16 py-4 text-xl font-medium hover:bg-[#4d3b2f] active:scale-[0.98] transition-colors"
           >
             TRY IT NOW
           </button>
         </div>
-        
+
         <p className="mt-12 text-xs text-[#f5f5f5]/40 tracking-[0.4em] uppercase">
           Quick Case Summary • Law Mapping • Precedent Research
         </p>

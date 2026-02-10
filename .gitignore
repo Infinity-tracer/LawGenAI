@@ -88,6 +88,7 @@ dist/
 dist-ssr/
 *.local
 
+
 # ============================================
 # IDE & Editors
 # ============================================
@@ -180,3 +181,10 @@ ipython_config.py
 *.bak
 *.backup
 *.old
+
+# ============================================
+# Local bundled conda env (Naya/dbms)
+# ============================================
+# Ignore the bundled conda environment and large binaries
+/Naya/dbms/
+/Naya/dbms/**

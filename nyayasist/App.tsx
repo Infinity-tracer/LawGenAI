@@ -42,9 +42,9 @@ const App: React.FC = () => {
           <Landing onTryNow={() => navigate(View.AUTH)} />
         )}
         {currentView === View.AUTH && (
-          <Auth 
-            onSuccess={handleLogin} 
-            onBack={() => navigate(View.LANDING)} 
+          <Auth
+            onSuccess={handleLogin}
+            onBack={() => navigate(View.LANDING)}
           />
         )}
         {currentView === View.CHAT && (

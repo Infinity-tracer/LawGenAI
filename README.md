@@ -13,6 +13,7 @@ NyayAssist consists of two main components:
 
 - **PDF Chat** - Upload legal documents and ask questions using AI-powered analysis
 - **Indian Kanoon Integration** - Search Indian case law database directly
+- **Law Comparison** - Automatic detection and comparison of old criminal codes (IPC, CrPC, IEA) with new replacements (BNS, BNSS, BEA)
 - **User Authentication** - Secure user registration and login system
 - **Session Management** - Track chat sessions and conversation history
 - **Access Logging** - Comprehensive API access logging and analytics
@@ -27,6 +28,8 @@ LawGenAI/
 │   ├── api.py                # Simplified API (without DB)
 │   ├── app.py                # Streamlit app
 │   ├── setup_database.py     # Database initialization script
+│   ├── law_comparison.py     # Law section comparison service
+│   ├── law_mapping_data.json # IPC/CrPC/IEA to BNS/BNSS/BEA mappings
 │   ├── database/             # Database models and services
 │   │   ├── db_config.py      # Database configuration
 │   │   ├── db_service.py     # Database operations
@@ -35,7 +38,7 @@ LawGenAI/
 │   ├── middleware/           # Custom middleware
 │   │   └── logging_middleware.py
 │   └── faiss_index/          # Vector store for PDF embeddings
-│
+
 └── nyayasist/                # Frontend React App
     ├── App.tsx               # Main application component
     ├── components/           # React components
@@ -135,10 +138,15 @@ LawGenAI/
 
 ### PDF Operations
 - `POST /api/pdf/upload` - Upload PDF files for processing
-- `POST /api/pdf/chat` - Chat with uploaded PDFs
+- `POST /api/pdf/chat` - Chat with uploaded PDFs (now includes automatic law comparisons)
 
 ### Indian Kanoon Search
 - `POST /api/kanoon/search` - Search Indian case law
+
+### Law Comparison (NEW)
+- `POST /api/law/compare` - Compare old law sections with new equivalents
+  - Request: `{"law_type": "IPC", "section": "302"}`
+  - Returns: BNS equivalent and changes summary
 
 ### Feedback
 - `POST /api/feedback` - Submit feedback on AI responses

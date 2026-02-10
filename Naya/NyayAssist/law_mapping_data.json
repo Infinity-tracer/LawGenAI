@@ -1,0 +1,484 @@
+{
+  "IPC_TO_BNS": {
+    "302": {
+      "old_section": "302",
+      "old_title": "Punishment for Murder",
+      "new_section": "103(1)",
+      "new_title": "Punishment for Murder",
+      "changes": "No substantial change in punishment"
+    },
+    "304": {
+      "old_section": "304",
+      "old_title": "Culpable Homicide Not Amounting to Murder",
+      "new_section": "104",
+      "new_title": "Culpable Homicide Not Amounting to Murder",
+      "changes": "No substantial change"
+    },
+    "304A": {
+      "old_section": "304A",
+      "old_title": "Causing Death by Rash and Negligent Act",
+      "new_section": "106",
+      "new_title": "Causing Death by Rash and Negligent Act",
+      "changes": "Punishment increased from max 2 years to 5 years. New subsection 106(2) for hit-and-run cases with up to 10 years"
+    },
+    "307": {
+      "old_section": "307",
+      "old_title": "Attempt to Murder",
+      "new_section": "109",
+      "new_title": "Attempt to Murder",
+      "changes": "No substantial change"
+    },
+    "309": {
+      "old_section": "309",
+      "old_title": "Attempt to Commit Suicide",
+      "new_section": "OMITTED",
+      "new_title": "N/A - Decriminalized",
+      "changes": "Section omitted from BNS, effectively decriminalizing attempt to commit suicide"
+    },
+    "354": {
+      "old_section": "354",
+      "old_title": "Assault or Criminal Force to Woman with Intent to Outrage her Modesty",
+      "new_section": "74",
+      "new_title": "Assault or Criminal Force to Woman with Intent to Outrage her Modesty",
+      "changes": "No substantial change"
+    },
+    "354B": {
+      "old_section": "354B",
+      "old_title": "Assault or Criminal Force with Intent to Disrobe a Woman",
+      "new_section": "76",
+      "new_title": "Assault or Criminal Force with Intent to Disrobe a Woman",
+      "changes": "No substantial change"
+    },
+    "375": {
+      "old_section": "375",
+      "old_title": "Rape",
+      "new_section": "63",
+      "new_title": "Rape",
+      "changes": "Clearer language, stricter penalties for crimes against women"
+    },
+    "376": {
+      "old_section": "376",
+      "old_title": "Punishment for Rape",
+      "new_section": "64-70",
+      "new_title": "Punishment for Rape",
+      "changes": "More comprehensive provisions. Gang rape victims age changed from below 16 to below 18 years"
+    },
+    "120B": {
+      "old_section": "120B",
+      "old_title": "Punishment of Criminal Conspiracy",
+      "new_section": "61",
+      "new_title": "Punishment of Criminal Conspiracy",
+      "changes": "No substantial change"
+    },
+    "124A": {
+      "old_section": "124A",
+      "old_title": "Sedition",
+      "new_section": "150",
+      "new_title": "Acts Endangering Sovereignty, Unity and Integrity of India",
+      "changes": "Sedition law omitted but BNS Section 150 retains essence with different framing"
+    },
+    "141": {
+      "old_section": "141",
+      "old_title": "Unlawful Assembly",
+      "new_section": "189",
+      "new_title": "Unlawful Assembly",
+      "changes": "No substantial change"
+    },
+    "143": {
+      "old_section": "143",
+      "old_title": "Punishment for Unlawful Assembly",
+      "new_section": "191",
+      "new_title": "Punishment for Unlawful Assembly",
+      "changes": "No substantial change"
+    },
+    "147": {
+      "old_section": "147",
+      "old_title": "Rioting",
+      "new_section": "192",
+      "new_title": "Rioting",
+      "changes": "No substantial change"
+    },
+    "279": {
+      "old_section": "279",
+      "old_title": "Rash Driving or Riding on a Public Way",
+      "new_section": "281",
+      "new_title": "Rash Driving or Riding on a Public Way",
+      "changes": "No substantial change"
+    },
+    "323": {
+      "old_section": "323",
+      "old_title": "Voluntarily Causing Hurt",
+      "new_section": "115",
+      "new_title": "Voluntarily Causing Hurt",
+      "changes": "No substantial change"
+    },
+    "324": {
+      "old_section": "324",
+      "old_title": "Voluntarily Causing Hurt by Dangerous Weapons or Means",
+      "new_section": "117",
+      "new_title": "Voluntarily Causing Hurt by Dangerous Weapons or Means",
+      "changes": "No substantial change"
+    },
+    "326": {
+      "old_section": "326",
+      "old_title": "Voluntarily Causing Grievous Hurt",
+      "new_section": "117",
+      "new_title": "Voluntarily Causing Grievous Hurt",
+      "changes": "Consolidated with provisions for dangerous weapons"
+    },
+    "379": {
+      "old_section": "379",
+      "old_title": "Theft",
+      "new_section": "303",
+      "new_title": "Theft",
+      "changes": "No substantial change"
+    },
+    "380": {
+      "old_section": "380",
+      "old_title": "Theft in Dwelling House",
+      "new_section": "304",
+      "new_title": "Theft in Dwelling House",
+      "changes": "No substantial change"
+    },
+    "406": {
+      "old_section": "406",
+      "old_title": "Criminal Breach of Trust",
+      "new_section": "316",
+      "new_title": "Criminal Breach of Trust",
+      "changes": "No substantial change"
+    },
+    "420": {
+      "old_section": "420",
+      "old_title": "Cheating and Dishonestly Inducing Delivery of Property",
+      "new_section": "318",
+      "new_title": "Cheating and Dishonestly Inducing Delivery of Property",
+      "changes": "No substantial change"
+    },
+    "467": {
+      "old_section": "467",
+      "old_title": "Forgery of Valuable Security, Will, etc.",
+      "new_section": "337",
+      "new_title": "Forgery of Valuable Security, Will, etc.",
+      "changes": "No substantial change"
+    },
+    "498A": {
+      "old_section": "498A",
+      "old_title": "Cruelty by Husband or Relatives of Husband",
+      "new_section": "84",
+      "new_title": "Cruelty by Husband or Relatives of Husband",
+      "changes": "No substantial change"
+    },
+    "499": {
+      "old_section": "499",
+      "old_title": "Defamation",
+      "new_section": "356",
+      "new_title": "Defamation",
+      "changes": "No substantial change"
+    },
+    "503": {
+      "old_section": "503",
+      "old_title": "Criminal Intimidation",
+      "new_section": "351",
+      "new_title": "Criminal Intimidation",
+      "changes": "No substantial change"
+    },
+    "504": {
+      "old_section": "504",
+      "old_title": "Intentional Insult with Intent to Provoke Breach of Peace",
+      "new_section": "352",
+      "new_title": "Intentional Insult with Intent to Provoke Breach of Peace",
+      "changes": "No substantial change"
+    }
+  },
+  "CRPC_TO_BNSS": {
+    "154": {
+      "old_section": "154",
+      "old_title": "Information in Cognizable Cases (FIR)",
+      "new_section": "173",
+      "new_title": "Information in Cognizable Cases",
+      "changes": "Expanded to allow 'zero FIRs' - can be lodged irrespective of area where offence is committed. Electronic FIR filing introduced"
+    },
+    "156": {
+      "old_section": "156",
+      "old_title": "Police Officer's Power to Investigate Cognizable Case",
+      "new_section": "175",
+      "new_title": "Police Officer's Power to Investigate Cognizable Case",
+      "changes": "No substantial change"
+    },
+    "157": {
+      "old_section": "157",
+      "old_title": "Procedure for Investigation",
+      "new_section": "176",
+      "new_title": "Procedure for Investigation",
+      "changes": "No substantial change"
+    },
+    "161": {
+      "old_section": "161",
+      "old_title": "Examination of Witnesses by Police",
+      "new_section": "180",
+      "new_title": "Examination of Witnesses by Police",
+      "changes": "No substantial change"
+    },
+    "173": {
+      "old_section": "173",
+      "old_title": "Report of Police Officer on Completion of Investigation",
+      "new_section": "193",
+      "new_title": "Report of Police Officer on Completion of Investigation",
+      "changes": "No substantial change"
+    },
+    "239": {
+      "old_section": "239",
+      "old_title": "Discharge",
+      "new_section": "262",
+      "new_title": "Discharge",
+      "changes": "60-day time limit introduced for accused to apply for discharge"
+    },
+    "240": {
+      "old_section": "240",
+      "old_title": "Framing of Charge",
+      "new_section": "263",
+      "new_title": "Framing of Charge",
+      "changes": "60-day limit introduced for framing charges from the date of first hearing"
+    },
+    "244": {
+      "old_section": "244",
+      "old_title": "Evidence for Prosecution",
+      "new_section": "267",
+      "new_title": "Evidence for Prosecution",
+      "changes": "Recording of witness evidence through audio-video electronic means allowed"
+    },
+    "41": {
+      "old_section": "41",
+      "old_title": "When Police May Arrest Without Warrant",
+      "new_section": "35",
+      "new_title": "When Police May Arrest Without Warrant",
+      "changes": "Provisions regarding handcuffing specified for certain categories of offenders"
+    },
+    "60": {
+      "old_section": "60",
+      "old_title": "Police to Report Apprehension",
+      "new_section": "54",
+      "new_title": "Police to Report Apprehension",
+      "changes": "No substantial change"
+    },
+    "61": {
+      "old_section": "61",
+      "old_title": "Form of Summons",
+      "new_section": "63",
+      "new_title": "Form of Summons",
+      "changes": "Electronic summons introduced via encrypted or other forms of electronic communication"
+    },
+    "82": {
+      "old_section": "82",
+      "old_title": "Proclamation for Person Absconding",
+      "new_section": "84",
+      "new_title": "Proclamation for Person Absconding",
+      "changes": "No substantial change"
+    },
+    "125": {
+      "old_section": "125",
+      "old_title": "Order for Maintenance of Wives, Children and Parents",
+      "new_section": "144",
+      "new_title": "Order for Maintenance of Wives, Children and Parents",
+      "changes": "No substantial change"
+    },
+    "204": {
+      "old_section": "204",
+      "old_title": "Issue of Process",
+      "new_section": "223",
+      "new_title": "Issue of Process",
+      "changes": "No substantial change"
+    },
+    "207": {
+      "old_section": "207",
+      "old_title": "Supply of Copies to Accused",
+      "new_section": "226",
+      "new_title": "Supply of Copies to Accused",
+      "changes": "No substantial change"
+    },
+    "313": {
+      "old_section": "313",
+      "old_title": "Examination of Accused",
+      "new_section": "332",
+      "new_title": "Examination of Accused",
+      "changes": "No substantial change"
+    },
+    "389": {
+      "old_section": "389",
+      "old_title": "Suspension of Sentence Pending Appeal",
+      "new_section": "419",
+      "new_title": "Suspension of Sentence Pending Appeal",
+      "changes": "No substantial change"
+    },
+    "437": {
+      "old_section": "437",
+      "old_title": "Bail in Non-Bailable Offences",
+      "new_section": "482",
+      "new_title": "Bail in Non-Bailable Offences",
+      "changes": "New definitions for 'bail' and 'bail bond' added, terminology revised"
+    },
+    "438": {
+      "old_section": "438",
+      "old_title": "Anticipatory Bail",
+      "new_section": "483",
+      "new_title": "Anticipatory Bail",
+      "changes": "No substantial change"
+    },
+    "482": {
+      "old_section": "482",
+      "old_title": "High Court's Inherent Powers",
+      "new_section": "531",
+      "new_title": "High Court's Inherent Powers",
+      "changes": "No substantial change"
+    }
+  },
+  "IEA_TO_BEA": {
+    "3": {
+      "old_section": "3",
+      "old_title": "Interpretation Clause",
+      "new_section": "2",
+      "new_title": "Definitions",
+      "changes": "Expanded definitions to include electronic records. Word 'man' replaced by 'person' in illustrations"
+    },
+    "5": {
+      "old_section": "5",
+      "old_title": "Evidence May Be Given of Facts in Issue and Relevant Facts",
+      "new_section": "3",
+      "new_title": "Evidence May Be Given of Facts in Issue and Relevant Facts",
+      "changes": "No substantial change"
+    },
+    "6": {
+      "old_section": "6",
+      "old_title": "Relevancy of Facts Forming Part of Same Transaction",
+      "new_section": "4",
+      "new_title": "Relevancy of Facts Forming Part of Same Transaction",
+      "changes": "No substantial change"
+    },
+    "8": {
+      "old_section": "8",
+      "old_title": "Motive, Preparation and Previous or Subsequent Conduct",
+      "new_section": "6",
+      "new_title": "Motive, Preparation and Previous or Subsequent Conduct",
+      "changes": "No substantial change"
+    },
+    "22": {
+      "old_section": "22-29",
+      "old_title": "Admissions and Confessions (Multiple Sections)",
+      "new_section": "22",
+      "new_title": "Confessions",
+      "changes": "Consolidated and refined provisions from IEA Sections 24, 28, and 29 into single streamlined section"
+    },
+    "24": {
+      "old_section": "24",
+      "old_title": "Confession Caused by Inducement, Threat or Promise",
+      "new_section": "22",
+      "new_title": "Confessions",
+      "changes": "Consolidated into Section 22"
+    },
+    "45": {
+      "old_section": "45",
+      "old_title": "Opinions of Experts",
+      "new_section": "39(1)",
+      "new_title": "Opinions of Experts",
+      "changes": "General expert opinions. Digital evidence experts specifically covered"
+    },
+    "45A": {
+      "old_section": "45A",
+      "old_title": "Opinion of Examiner of Electronic Evidence",
+      "new_section": "39(2)",
+      "new_title": "Opinion of Examiner of Electronic Evidence",
+      "changes": "Explicitly recognizes digital and electronic evidence as primary evidence when properly maintained"
+    },
+    "52": {
+      "old_section": "52",
+      "old_title": "Power of Court to Put Questions or Order Production",
+      "new_section": "47",
+      "new_title": "Power of Court to Put Questions or Order Production",
+      "changes": "No substantial change"
+    },
+    "55": {
+      "old_section": "55",
+      "old_title": "Presumption as to Signatures",
+      "new_section": "50",
+      "new_title": "Presumption as to Signatures",
+      "changes": "No substantial change"
+    },
+    "57": {
+      "old_section": "57",
+      "old_title": "Facts of Which Court Must Take Judicial Notice",
+      "new_section": "52",
+      "new_title": "Facts of Which Court Must Take Judicial Notice",
+      "changes": "No substantial change"
+    },
+    "60": {
+      "old_section": "60",
+      "old_title": "Oral Evidence Must Be Direct",
+      "new_section": "55",
+      "new_title": "Oral Evidence Must Be Direct",
+      "changes": "No substantial change"
+    },
+    "65": {
+      "old_section": "65",
+      "old_title": "Cases in Which Secondary Evidence Is Admissible",
+      "new_section": "60",
+      "new_title": "Cases in Which Secondary Evidence Is Admissible",
+      "changes": "Electronic records treated differently - properly maintained electronic records now primary evidence"
+    },
+    "74": {
+      "old_section": "74",
+      "old_title": "Public Documents",
+      "new_section": "74(1), 74(2)",
+      "new_title": "Public Documents",
+      "changes": "No substantial change, reorganized"
+    },
+    "75": {
+      "old_section": "75",
+      "old_title": "Private Documents",
+      "new_section": "75",
+      "new_title": "Private Documents",
+      "changes": "Expanded to explicitly include electronic and digital records"
+    },
+    "101": {
+      "old_section": "101",
+      "old_title": "Burden of Proof",
+      "new_section": "96",
+      "new_title": "Burden of Proof",
+      "changes": "No substantial change"
+    },
+    "102": {
+      "old_section": "102",
+      "old_title": "Burden of Proof on Accused",
+      "new_section": "97",
+      "new_title": "Burden of Proof on Accused",
+      "changes": "No substantial change"
+    },
+    "103": {
+      "old_section": "103",
+      "old_title": "Burden of Proof as to Particular Fact",
+      "new_section": "98",
+      "new_title": "Burden of Proof as to Particular Fact",
+      "changes": "No substantial change"
+    },
+    "114": {
+      "old_section": "114",
+      "old_title": "Court May Presume Existence of Certain Facts",
+      "new_section": "109",
+      "new_title": "Court May Presume Existence of Certain Facts",
+      "changes": "No substantial change"
+    },
+    "118": {
+      "old_section": "118",
+      "old_title": "Who May Testify",
+      "new_section": "113",
+      "new_title": "Who May Testify",
+      "changes": "No substantial change"
+    },
+    "136": {
+      "old_section": "136",
+      "old_title": "Judge's Power to Put Questions or Order Production",
+      "new_section": "131",
+      "new_title": "Judge's Power to Put Questions or Order Production",
+      "changes": "No substantial change"
+    }
+  }
+}

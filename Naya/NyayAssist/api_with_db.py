@@ -27,6 +27,9 @@ from dotenv import load_dotenv
 from database import db_service, init_db
 from middleware import AccessLogMiddleware, get_client_ip
 
+# Law comparison imports
+from law_comparison import LawComparisonService
+
 load_dotenv()
 
 app = FastAPI(
@@ -53,6 +56,9 @@ KANOON_API_TOKEN = os.getenv("KANOON_API_TOKEN")
 BASE_URL = "https://api.indiankanoon.org"
 FAISS_INDEX_PATH = "faiss_index"
 
+# Initialize law comparison service
+law_service = LawComparisonService()
+
 # ---------------------- PYDANTIC MODELS ----------------------
 
 class ChatRequest(BaseModel):
@@ -60,10 +66,21 @@ class ChatRequest(BaseModel):
     session_uuid: Optional[str] = None
     user_uuid: Optional[str] = None
 
+class LawComparison(BaseModel):
+    old_law: str
+    old_section: str
+    old_title: str
+    new_law: str
+    new_section: str
+    new_title: str
+    changes: str
+    original_text: Optional[str] = None
+
 class ChatResponse(BaseModel):
     answer: str
     success: bool
     message_id: Optional[str] = None
+    law_comparisons: Optional[List[LawComparison]] = None
 
 class KanoonSearchRequest(BaseModel):
     query: str
@@ -82,6 +99,7 @@ class KanoonSearchResponse(BaseModel):
     total_found: int
     success: bool
     query_id: Optional[str] = None
+    law_comparisons: Optional[List[LawComparison]] = None
 
 class UploadResponse(BaseModel):
     message: str
@@ -207,10 +225,113 @@ async def health_check():
 
 # ---------------------- USER ENDPOINTS ----------------------
 
-@app.post("/api/users/register", response_model=UserResponse)
-async def register_user(user: UserCreate):
-    """Register a new user"""
+# In-memory storage for verification codes (for demo purposes)
+# In production, use Redis with expiration
+verification_codes = {}
+
+# Email Imports
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
+class SendOTPRequest(BaseModel):
+    email: EmailStr
+
+class VerifyOTPRequest(BaseModel):
+    email: EmailStr
+    otp: str
+
+def send_email_otp(to_email: str, otp: str):
+    """Send OTP via SMTP"""
+    smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+    smtp_port = int(os.getenv("SMTP_PORT", 587))
+    smtp_username = os.getenv("SMTP_USERNAME")
+    smtp_password = os.getenv("SMTP_PASSWORD")
+    sender_email = os.getenv("SENDER_EMAIL")
+
+    if not all([smtp_username, smtp_password, sender_email]):
+        print(f"⚠️ SMTP credentials missing. Mocking email to {to_email}: {otp}")
+        return
+
+    msg = MIMEMultipart()
+    msg['From'] = sender_email
+    msg['To'] = to_email
+    msg['Subject'] = "NyayAssist Verification Code"
+
+    body = f"""
+    <html>
+      <body style="font-family: Arial, sans-serif; color: #333;">
+        <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border_radius: 5px;">
+          <h2 style="color: #d4af37;">NyayAssist Verification</h2>
+          <p>Hello,</p>
+          <p>Your verification code for NyayAssist is:</p>
+          <div style="background-color: #f5f5f5; padding: 15px; text-align: center; border-radius: 5px; margin: 20px 0;">
+            <span style="font-size: 24px; font-weight: bold; letter-spacing: 5px; color: #3d2b1f;">{otp}</span>
+          </div>
+          <p>This code will expire in 10 minutes.</p>
+          <p style="font-size: 12px; color: #777; margin-top: 30px;">
+            If you did not request this code, please ignore this email.
+          </p>
+        </div>
+      </body>
+    </html>
+    """
+    msg.attach(MIMEText(body, 'html'))
+
     try:
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.starttls()
+        server.login(smtp_username, smtp_password)
+        text = msg.as_string()
+        server.sendmail(sender_email, to_email, text)
+        server.quit()
+        print(f"✅ OTP sent to {to_email}")
+    except Exception as e:
+        print(f"❌ Failed to send email: {e}")
+        # Fallback to console for dev
+        print(f"Mocking email to {to_email}: {otp}")
+        raise e
+
+
+@app.post("/api/users/send-otp")
+async def send_otp(request: SendOTPRequest):
+    """Send verification OTP to email"""
+    try:
+        # Check if email already registered
+        existing = db_service.get_user_by_email(request.email)
+        if existing:
+            raise HTTPException(status_code=400, detail="Email already registered")
+        
+        # Generate 6-digit OTP
+        otp = str(uuid.uuid4().int)[:6]
+        
+        # Store OTP
+        verification_codes[request.email] = otp
+        
+        # Send Email
+        try:
+            send_email_otp(request.email, otp)
+        except Exception as e:
+             raise HTTPException(status_code=500, detail=f"Failed to send email: {str(e)}")
+        
+        return {"success": True, "message": "Verification code sent to email"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+class UserRegisterWithOTP(UserCreate):
+    otp: str
+
+@app.post("/api/users/register", response_model=UserResponse)
+async def register_user(user: UserRegisterWithOTP):
+    """Register a new user with OTP verification"""
+    try:
+        # Verify OTP
+        stored_otp = verification_codes.get(user.email)
+        if not stored_otp or stored_otp != user.otp:
+            raise HTTPException(status_code=400, detail="Invalid or expired verification code")
+            
         # Check if user already exists
         existing = db_service.get_user_by_email(user.email)
         if existing:
@@ -223,6 +344,9 @@ async def register_user(user: UserCreate):
             password_hash=hash_password(user.password),
             phone=user.phone
         )
+        
+        # Clear used OTP
+        del verification_codes[user.email]
         
         return UserResponse(
             user_uuid=new_user["user_uuid"],
@@ -377,22 +501,43 @@ async def chat_with_pdf(request: ChatRequest):
         context = format_docs(docs)
         response = chain.invoke({"context": context, "question": request.question})
         
+        # Detect law sections and get comparisons
+        augmented_response, comparisons = law_service.augment_answer(response, request.question)
+        
         response_time_ms = int((time.time() - start_time) * 1000)
         
         # Log LLM output to database
         llm_log = db_service.log_llm_output(
             user_question=request.question,
-            llm_response=response,
+            llm_response=augmented_response,  # Log the augmented response
             context_provided=context[:5000] if context else None,  # Limit context size
             response_time_ms=response_time_ms,
             model_name="gemini-2.5-flash",
             success=True
         )
         
+        # Convert comparisons to LawComparison objects
+        law_comparisons = None
+        if comparisons:
+            law_comparisons = [
+                LawComparison(
+                    old_law=comp['old_law'],
+                    old_section=comp['old_section'],
+                    old_title=comp['old_title'],
+                    new_law=comp['new_law'],
+                    new_section=comp['new_section'],
+                    new_title=comp['new_title'],
+                    changes=comp['changes'],
+                    original_text=comp.get('original_text')
+                )
+                for comp in comparisons
+            ]
+        
         return ChatResponse(
-            answer=response, 
+            answer=augmented_response,
             success=True,
-            message_id=llm_log["output_uuid"] if llm_log else None
+            message_id=llm_log["output_uuid"] if llm_log else None,
+            law_comparisons=law_comparisons
         )
     except HTTPException:
         raise
@@ -468,6 +613,27 @@ async def search_kanoon(request: KanoonSearchRequest):
         
         response_time_ms = int((time.time() - start_time) * 1000)
         
+        # Detect law sections in query and get comparisons
+        detected_sections = law_service.detect_law_sections(request.query)
+        law_comparisons_list = None
+        
+        if detected_sections:
+            comparisons = law_service.get_all_comparisons(detected_sections)
+            if comparisons:
+                law_comparisons_list = [
+                    LawComparison(
+                        old_law=comp['old_law'],
+                        old_section=comp['old_section'],
+                        old_title=comp['old_title'],
+                        new_law=comp['new_law'],
+                        new_section=comp['new_section'],
+                        new_title=comp['new_title'],
+                        changes=comp['changes'],
+                        original_text=comp.get('original_text')
+                    )
+                    for comp in comparisons
+                ]
+        
         # Log Kanoon query to database
         kanoon_log = db_service.log_kanoon_query(
             search_query=request.query,
@@ -484,7 +650,8 @@ async def search_kanoon(request: KanoonSearchRequest):
             cases=cases,
             total_found=len(docs),
             success=True,
-            query_id=kanoon_log["query_uuid"] if kanoon_log else None
+            query_id=kanoon_log["query_uuid"] if kanoon_log else None,
+            law_comparisons=law_comparisons_list
         )
     except HTTPException:
         raise
@@ -521,6 +688,192 @@ async def submit_feedback(feedback: FeedbackRequest):
         return {"success": True, "feedback_id": fb["feedback_uuid"]}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ---------------------- LAW COMPARISON ENDPOINT ----------------------
+
+class LawCompareRequest(BaseModel):
+    law_type: str  # 'IPC', 'CRPC', or 'IEA'
+    section: str   # Section number like '302', '304A'
+
+class LawCompareResponse(BaseModel):
+    success: bool
+    comparison: Optional[LawComparison] = None
+    error: Optional[str] = None
+
+@app.post("/api/law/compare", response_model=LawCompareResponse)
+async def compare_law_section(request: LawCompareRequest):
+    """
+    Get comparison between old law section and new equivalent
+    
+    Example request:
+    {
+        "law_type": "IPC",
+        "section": "302"
+    }
+    
+    Returns BNS equivalent and changes summary
+    """
+    try:
+        law_type = request.law_type.upper()
+        if law_type not in ['IPC', 'CRPC', 'IEA']:
+            return LawCompareResponse(
+                success=False,
+                error=f"Invalid law_type. Must be one of: IPC, CRPC, IEA"
+            )
+        
+        # Get comparison data
+        comparison_data = law_service.get_comparison_data(law_type, request.section)
+        
+        if not comparison_data:
+            return LawCompareResponse(
+                success=False,
+                error=f"No comparison data found for {law_type} Section {request.section}"
+            )
+        
+        # Convert to LawComparison object
+        comparison = LawComparison(
+            old_law=comparison_data['old_law'],
+            old_section=comparison_data['old_section'],
+            old_title=comparison_data['old_title'],
+            new_law=comparison_data['new_law'],
+            new_section=comparison_data['new_section'],
+            new_title=comparison_data['new_title'],
+            changes=comparison_data['changes']
+        )
+        
+        return LawCompareResponse(
+            success=True,
+            comparison=comparison
+        )
+    except Exception as e:
+        return LawCompareResponse(
+            success=False,
+            error=str(e)
+        )
+
+
+class LawSectionRequest(BaseModel):
+    law_type: str
+    section: str
+
+class BulkCompareRequest(BaseModel):
+    sections: List[LawSectionRequest]
+
+class BulkCompareResponse(BaseModel):
+    success: bool
+    comparisons: List[LawComparison]
+    not_found: Optional[List[dict]] = None
+
+@app.post("/api/law/compare/bulk", response_model=BulkCompareResponse)
+async def compare_law_sections_bulk(request: BulkCompareRequest):
+    """
+    Get comparisons for multiple law sections at once
+    
+    Example request:
+    {
+        "sections": [
+            {"law_type": "IPC", "section": "302"},
+            {"law_type": "IPC", "section": "376"},
+            {"law_type": "CRPC", "section": "154"}
+        ]
+    }
+    """
+    try:
+        comparisons = []
+        not_found = []
+        
+        for section_req in request.sections:
+            law_type = section_req.law_type.upper()
+            if law_type not in ['IPC', 'CRPC', 'IEA']:
+                not_found.append({
+                    "law_type": section_req.law_type,
+                    "section": section_req.section,
+                    "reason": "Invalid law_type"
+                })
+                continue
+            
+            comparison_data = law_service.get_comparison_data(law_type, section_req.section)
+            
+            if comparison_data:
+                comparisons.append(LawComparison(
+                    old_law=comparison_data['old_law'],
+                    old_section=comparison_data['old_section'],
+                    old_title=comparison_data['old_title'],
+                    new_law=comparison_data['new_law'],
+                    new_section=comparison_data['new_section'],
+                    new_title=comparison_data['new_title'],
+                    changes=comparison_data['changes']
+                ))
+            else:
+                not_found.append({
+                    "law_type": section_req.law_type,
+                    "section": section_req.section,
+                    "reason": "Not found in database"
+                })
+        
+        return BulkCompareResponse(
+            success=True,
+            comparisons=comparisons,
+            not_found=not_found if not_found else None
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/law/sections/{law_type}")
+async def get_law_sections(law_type: str):
+    """
+    Get all available sections for a specific law type
+    
+    Example: /api/law/sections/IPC
+    Returns: List of all IPC sections available in the database
+    """
+    try:
+        law_type = law_type.upper()
+        if law_type not in ['IPC', 'CRPC', 'IEA']:
+            raise HTTPException(status_code=400, detail="Invalid law_type. Must be IPC, CRPC, or IEA")
+        
+        # Map law type to mapping key
+        mapping_key = {
+            'IPC': 'IPC_TO_BNS',
+            'CRPC': 'CRPC_TO_BNSS',
+            'IEA': 'IEA_TO_BEA'
+        }.get(law_type)
+        
+        sections_data = law_service.mapping_data.get(mapping_key, {})
+        
+        # Format sections with basic info
+        sections = []
+        for section_num, data in sections_data.items():
+            sections.append({
+                "section": section_num,
+                "title": data.get("old_title", ""),
+                "new_section": data.get("new_section", ""),
+                "new_law": {
+                    'IPC': 'BNS',
+                    'CRPC': 'BNSS',
+                    'IEA': 'BEA'
+                }.get(law_type, '')
+            })
+        
+        # Sort by section number
+        sections.sort(key=lambda x: (
+            int(''.join(filter(str.isdigit, x['section'])) or '0'),
+            x['section']
+        ))
+        
+        return {
+            "success": True,
+            "law_type": law_type,
+            "total_sections": len(sections),
+            "sections": sections
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 
 # ---------------------- ANALYTICS ENDPOINTS ----------------------
